@@ -1,0 +1,39 @@
+{
+  "name": "minimax-usage",
+  "displayName": "VSCode MiniMax Usage",
+  "description": "Display MiniMax Token Plan usage in the status bar",
+  "version": "1.0.0",
+  "publisher": "minimax-usage",
+  "license": "MIT",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "keywords": ["minimax", "token plan", "usage", "status bar", "quota"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/minimax-usage"
+  },
+  "scripts": {
+    "package": "vsce package"
+  },
+  "contributes": {
+    "commands": [
+      { "command": "minimaxUsage.setApiKey", "title": "MiniMax Usage: Set API Key" },
+      { "command": "minimaxUsage.refresh", "title": "MiniMax Usage: Refresh" },
+      { "command": "minimaxUsage.showDetails", "title": "MiniMax Usage: Show Details" }
+    ],
+    "configuration": {
+      "title": "MiniMax Usage",
+      "properties": {
+        "minimaxUsage.refreshIntervalMinutes": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 60,
+          "description": "Auto-refresh interval in minutes"
+        }
+      }
+    }
+  }
+}
