@@ -24,11 +24,23 @@ Display your [MiniMax Token Plan](https://platform.minimax.io/docs/token-plan/fa
 | API key not set | `🔑 MiniMax: Set API Key` |
 | Error / fetch failed | `⚠️ MiniMax: Error` |
 
+## Installation
+
+1. Download the [latest `.vsix` file](https://github.com/Piyabordee/minimax-usage/releases/latest)
+2. In VS Code: **Extensions** → **...** (three dots) → **Install from VSIX...**
+3. Select the downloaded `.vsix` file
+4. **Reload Window** when prompted
+
+**Or via command line:**
+```bash
+code --install-extension minimax-usage-1.0.0.vsix
+```
+
 ## Setup
 
 1. Get your Token Plan Key from [MiniMax Platform](https://platform.minimax.io/docs/token-plan/faq)
-2. Open the Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`)
-3. Run **MiniMax Usage: Set API Key** and paste your key
+2. Click the status bar item `🔑 MiniMax: Set API Key` (bottom-right)
+3. Paste your Token Plan Key
 4. The status bar will update automatically
 
 ## Commands
