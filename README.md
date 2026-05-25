@@ -18,7 +18,7 @@
 
 ### วิธีที่ 2: ผ่าน Command Line
 ```bash
-code --install-extension minimax-usage-1.0.1.vsix
+code --install-extension minimax-usage-1.0.2.vsix
 ```
 
 ## วิธีใช้งาน
@@ -60,6 +60,13 @@ code --install-extension minimax-usage-1.0.1.vsix
 | การตั้งค่า | ชนิด | ค่าเริ่มต้น | คำอธิบาย |
 | --- | --- | --- | --- |
 | `minimaxUsage.refreshIntervalMinutes` | `number` | `5` | ระยะเวลา refresh อัตโนมัติ (นาที) |
+
+## สิ่งที่แก้ไข
+
+- **v1.0.2** — แสดงเวลาที่เหลือก่อน quota reset ใน status bar (เช่น `7% (1h26m)`)
+  - ใช้ `end_time - Date.now()` แทน `remains_time` (เนื่องจาก API บางครั้ง return หน่วยไม่ตรง)
+  - แก้ไข bug ที่เวลาไม่แสดงเมื่อ `total = 0`
+- **v1.0.1** — แก้ไข publisher ID จาก `undefined_publisher` เป็น `minimax-usage`
 
 ## API ที่ใช้
 

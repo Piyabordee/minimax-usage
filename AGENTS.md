@@ -32,6 +32,13 @@ No build step. No bundling. Pure Node.js + VS Code API.
 - **Status bar colors:** normal < 75%, warning (yellow) 75–89%, error (red) 90%+.
 - **Number formatting:** `fmt()` uses K/M suffixes for status bar compactness; `toLocaleString()` for detail view.
 - **No external dependencies** — uses only `vscode` and Node built-in `https`.
+- **Time remaining calculation:** uses `end_time - Date.now()` instead of `remains_time` (API may return seconds vs milliseconds inconsistently).
+- **Status bar text always shows**: percentage + time left when available (e.g. `7% (1h26m)`), even when usage is low or `total = 0`.
+
+## Modification History
+
+- **v1.0.2** — `updateStatusBar()`: fixed time display bug when `total = 0`; now uses `end_time` (absolute) instead of `remains_time` (relative) for reliable countdown.
+- **v1.0.1** — Fixed publisher ID from `undefined_publisher` to `minimax-usage` (required for extension updates to work).
 
 ## Commands
 

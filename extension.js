@@ -7,7 +7,7 @@ const SECRET_KEY = 'minimaxUsage.apiKey';
 let statusBarItem, refreshTimer, lastData = null;
 
 async function activate(context) {
-  statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+  statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100000);
   statusBarItem.command = 'minimaxUsage.setApiKey';
   statusBarItem.tooltip = 'MiniMax Token Plan — click to set API key';
   context.subscriptions.push(statusBarItem);
@@ -120,21 +120,32 @@ function updateStatusBar(data) {
     if (mainModel) {
       const used = mainModel.current_interval_usage_count || 0;
       const total = mainModel.current_interval_total_count || 0;
-      const remainsMs = mainModel.remains_time || 0;
+      const endTime = mainModel.end_time || 0;
+      // Check if endTime is in seconds (10 digits) vs milliseconds (13 digits)
+      const endTimeMs = endTime > 1e12 ? endTime : endTime * 1000;
+      const remainsMs = endTimeMs > 0 ? endTimeMs - Date.now() : 0;
 
       if (total > 0) {
         pct = Math.round((used / total) * 100);
+      }
 
-        if (remainsMs > 0) {
-          const hours = Math.floor(remainsMs / 3600000);
-          const mins = Math.floor((remainsMs % 3600000) / 60000);
-          if (hours > 0) {
-            timeLeftStr = ` (${hours}h${mins}m)`;
-          } else if (mins > 0) {
-            timeLeftStr = ` (${mins}m)`;
-          }
+      if (remainsMs > 0) {
+        const hours = Math.floor(remainsMs / 3600000);
+        const mins = Math.floor((remainsMs % 3600000) / 60000);
+        if (hours > 0) {
+          timeLeftStr = ` (${hours}h${mins}m)`;
+        } else if (mins > 0) {
+          timeLeftStr = ` (${mins}m)`;
+        } else {
+          timeLeftStr = ` (<1m)`;
         }
-        text = `$(pulse) MiniMax ${pct}%${timeLeftStr}`;
+      }
+
+      // DEBUG
+      console.log('[MiniMax] end_time raw:', endTime, 'endTimeMs:', endTimeMs, 'Date.now():', Date.now(), 'remainsMs:', remainsMs, 'pct:', pct, 'total:', total);
+
+      if (pct !== null || timeLeftStr) {
+        text = `$(pulse) MiniMax${pct !== null ? ' ' + pct + '%' : ''}${timeLeftStr}`;
       }
     }
   }
