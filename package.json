@@ -2,7 +2,7 @@
   "name": "minimax-usage",
   "displayName": "VSCode MiniMax Usage",
   "description": "Display MiniMax Token Plan usage in the status bar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "minimax-usage",
   "license": "MIT",
   "engines": { "vscode": "^1.85.0" },

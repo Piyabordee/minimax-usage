@@ -4,74 +4,89 @@
 
 ![Status bar example](https://img.shields.io/badge/VS%20Code-Extension-blue?logo=visual-studio-code)
 
-Display your [MiniMax Token Plan](https://platform.minimax.io/docs/token-plan/faq) usage directly in the VS Code status bar.
+แสดงการใช้งาน [MiniMax Token Plan](https://platform.minimax.io/docs/token-plan/faq) บน Status Bar ของ VS Code
 
 </div>
 
-## Features
+## วิธีติดตั้ง
 
-- Shows token usage percentage for MiniMax models in the status bar
-- Displays remaining time until quota resets
-- Automatically refreshes at a configurable interval
-- Secure API key storage via VS Code Secret Storage
+### วิธีที่ 1: ติดตั้งจากไฟล์ .vsix
+1. ดาวน์โหลดไฟล์ `.vsix` จาก [Releases](https://github.com/Piyabordee/minimax-usage/releases/latest)
+2. ใน VS Code: ไปที่ **Extensions** → กด **...** (สามจุด) → **Install from VSIX...**
+3. เลือกไฟล์ `.vsix` ที่ดาวน์โหลดมา
+4. กด **Reload Window** เมื่อมีข้อความแจ้ง
 
-**Status bar examples:**
-
-| Situation | Display |
-| --- | --- |
-| Usage available | `⚡ MiniMax 0% (10h)` |
-| High usage | `⚡ MiniMax 85% (30m)` |
-| API key not set | `🔑 MiniMax: Set API Key` |
-| Error / fetch failed | `⚠️ MiniMax: Error` |
-
-## Installation
-
-1. Download the [latest `.vsix` file](https://github.com/Piyabordee/minimax-usage/releases/latest)
-2. In VS Code: **Extensions** → **...** (three dots) → **Install from VSIX...**
-3. Select the downloaded `.vsix` file
-4. **Reload Window** when prompted
-
-**Or via command line:**
+### วิธีที่ 2: ผ่าน Command Line
 ```bash
-code --install-extension minimax-usage-1.0.0.vsix
+code --install-extension minimax-usage-1.0.1.vsix
 ```
 
-## Setup
+## วิธีใช้งาน
 
-1. Get your Token Plan Key from [MiniMax Platform](https://platform.minimax.io/docs/token-plan/faq)
-2. Click the status bar item `🔑 MiniMax: Set API Key` (bottom-right)
-3. Paste your Token Plan Key
-4. The status bar will update automatically
+### 1. ขอ Token Plan Key
+1. ไปที่ [MiniMax Platform](https://platform.minimax.io/docs/token-plan/faq)
+2. ล็อกอินและคัดลอก Token Plan Key ของคุณ
 
-## Commands
+### 2. ตั้งค่าใน VS Code
+1. คลิกที่ `🔑 MiniMax: Set API Key` บน Status Bar (ด้านล่างขวา)
+2. วาง Token Plan Key ของคุณ
+3. Status Bar จะแสดง % การใช้งานทันที
 
-| Command | Description |
+### 3. ดูรายละเอียดเพิ่มเติม
+- คลิกที่ Status Bar เพื่อดู **Details** (กราฟ + ข้อมูลดิบ)
+- รันคำสั่ง **MiniMax Usage: Refresh** เพื่อดึงข้อมูลใหม่ทันที
+
+## ตัวอย่างบน Status Bar
+
+| สถานการณ์ | แสดง |
 | --- | --- |
-| `MiniMax Usage: Set API Key` | Enter your MiniMax Token Plan Key |
-| `MiniMax Usage: Refresh` | Manually refresh usage data |
-| `MiniMax Usage: Show Details` | View detailed usage breakdown |
+| ใช้งานได้ปกติ | `⚡ MiniMax 0% (10h)` |
+| ใช้งานสูง | `⚡ MiniMax 85% (30m)` |
+| ยังไม่ตั้ง API Key | `🔑 MiniMax: Set API Key` |
+| เกิดข้อผิดพลาด | `⚠️ MiniMax: Error` |
 
-## Settings
+หมายเหตุ: เวลาในวงเล็บ `(10h)` คือเวลาที่เหลือก่อน quota จะ reset
 
-| Setting | Type | Default | Description |
+## คำสั่งที่มี
+
+| คำสั่ง | คำอธิบาย |
+| --- | --- |
+| `MiniMax Usage: Set API Key` | ตั้งค่า Token Plan Key |
+| `MiniMax Usage: Refresh` | ดึงข้อมูลการใช้งานใหม่ |
+| `MiniMax Usage: Show Details` | แสดงรายละเอียดทั้งหมด |
+
+## การตั้งค่า
+
+| การตั้งค่า | ชนิด | ค่าเริ่มต้น | คำอธิบาย |
 | --- | --- | --- | --- |
-| `minimaxUsage.refreshIntervalMinutes` | `number` | `5` | Auto-refresh interval in minutes (1-60) |
+| `minimaxUsage.refreshIntervalMinutes` | `number` | `5` | ระยะเวลา refresh อัตโนมัติ (นาที) |
 
-## API
+## API ที่ใช้
 
-This extension uses the MiniMax Token Plan API:
 - **Endpoint:** `GET https://www.minimax.io/v1/token_plan/remains`
 - **Auth:** `Authorization: Bearer <Token Plan Key>`
 
-## Requirements
+## ความต้องการ
 
-- VS Code 1.85.0 or higher
-- A valid MiniMax Token Plan Key
+- VS Code เวอร์ชัน 1.85.0 ขึ้นไป
+- Token Plan Key ที่ถูกต้องจาก MiniMax
+
+## สร้างไฟล์ .vsix เอง
+
+```powershell
+# เปลี่ยน version ใน package.json ก่อน
+((Get-Content package.json) -replace '"version": "1.0.0"', '"version": "1.0.1"') | Set-Content package.json
+
+# สร้างไฟล์ .vsix
+npx vsce package
+```
+
+ไฟล์ที่ได้จะเป็น `minimax-usage-1.0.1.vsix`
 
 ## License
 
 [MIT](LICENSE)
 
-## Credits
+## แหล่งที่มา
 
 Inspired by [vscode-zai-usage](https://github.com/j4rviscmd/vscode-zai-usage) by j4rviscmd

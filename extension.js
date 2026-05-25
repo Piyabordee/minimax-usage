@@ -124,7 +124,6 @@ function updateStatusBar(data) {
 
       if (total > 0) {
         pct = Math.round((used / total) * 100);
-        text = `$(pulse) MiniMax ${pct}%`;
 
         if (remainsMs > 0) {
           const hours = Math.floor(remainsMs / 3600000);
@@ -135,6 +134,7 @@ function updateStatusBar(data) {
             timeLeftStr = ` (${mins}m)`;
           }
         }
+        text = `$(pulse) MiniMax ${pct}%${timeLeftStr}`;
       }
     }
   }
