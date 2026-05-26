@@ -2,98 +2,86 @@
 
 <div align="center">
 
-![Status bar example](https://img.shields.io/badge/VS%20Code-Extension-blue?logo=visual-studio-code)
+![Status bar example](./assets/screenshots/statusbar.png)
 
-แสดงการใช้งาน [MiniMax Token Plan](https://platform.minimax.io/docs/token-plan/faq) บน Status Bar ของ VS Code
+[![Latest Release](https://img.shields.io/github/v/release/Piyabordee/minimax-usage?style=for-the-badge&color=green&label=Latest&logo=github&logoColor=white)](https://github.com/Piyabordee/minimax-usage/releases/latest)
+[![Last Commit](https://img.shields.io/github/last-commit/Piyabordee/minimax-usage/main?style=for-the-badge&color=1F6FEB&label=Last%20Update&logo=git&logoColor=white)](https://github.com/Piyabordee/minimax-usage/commits/main)
+[![License](https://img.shields.io/badge/License-MIT-018FF5?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
+
+<!-- markdownlint-disable-next-line -->
+### Display your [MiniMax Token Plan](https://platform.minimax.io/docs/token-plan/faq) usage percentage directly in the VS Code status bar
+
+## Why this extension?
+
+Most existing VS Code extensions for AI usage tracking don't support MiniMax's token plan API. This extension fills that gap by directly calling `https://www.minimax.io/v1/token_plan/remains` to show your real-time usage in the status bar.
 
 </div>
 
-## วิธีติดตั้ง
+## Features
 
-### วิธีที่ 1: ติดตั้งจากไฟล์ .vsix
-1. ดาวน์โหลดไฟล์ `.vsix` จาก [Releases](https://github.com/Piyabordee/minimax-usage/releases/latest)
-2. ใน VS Code: ไปที่ **Extensions** → กด **...** (สามจุด) → **Install from VSIX...**
-3. เลือกไฟล์ `.vsix` ที่ดาวน์โหลดมา
-4. กด **Reload Window** เมื่อมีข้อความแจ้ง
+- Shows token quota usage (e.g. `45% (2h30m)`) or remaining tokens (e.g. `55% (2h30m)`) in the status bar
+- Displays time remaining until quota resets when available
+- Automatically refreshes at a configurable interval
+- Secure API key storage via VS Code Secret Storage
 
-### วิธีที่ 2: ผ่าน Command Line
+**Status bar examples:**
+
+|           Situation            |     Display     |
+| ------------------------------ | --------------- |
+| Authenticated, usage available | `⚡ MiniMax 45% (2h30m)` |
+| Authenticated, no reset time   | `⚡ MiniMax 45%` |
+| Authenticated, remaining mode   | `⚡ MiniMax 55% (2h30m)` |
+| API key not set                | `🔑 MiniMax: Set API Key` |
+| Error / fetch failed           | `⚠️ MiniMax: Error` |
+
+## Setup
+
+1. Get your Token Plan Key from the [MiniMax Platform](https://platform.minimax.io/docs/token-plan/faq)
+2. Open the Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`)
+3. Run **MiniMax Usage: Set API Key** and paste your token
+4. The status bar will update immediately
+
+## Commands
+
+|           Command           |             Description              |
+| --------------------------- | ------------------------------------ |
+| `MiniMax Usage: Set API Key`   | Enter and verify your MiniMax Token Plan Key |
+| `MiniMax Usage: Clear API Key` | Remove the stored API token          |
+| `MiniMax Usage: Refresh`       | Manually refresh usage data          |
+| `MiniMax Usage: Show Details`  | Display detailed usage information   |
+
+## Settings
+
+|          Setting           |   Type    | Default |                                     Description                                      |
+| -------------------------- | --------- | ------- | ------------------------------------------------------------------------------------ |
+| `minimaxUsage.refreshIntervalMinutes` | `number`  | `5`     | Data refresh interval in minutes                                               |
+
+## Requirements
+
+- VS Code 1.85.0 or higher
+- A valid MiniMax Token Plan Key
+
+## Installation
+
+### Method 1: Install from .vsix file
+1. Download the `.vsix` file from [Releases](https://github.com/Piyabordee/minimax-usage/releases/latest)
+2. In VS Code: go to **Extensions** → press **...** (three dots) → **Install from VSIX...**
+3. Select the downloaded `.vsix` file
+4. Press **Reload Window** when prompted
+
+### Method 2: Via Command Line
 ```bash
 code --install-extension minimax-usage-1.0.2.vsix
 ```
 
-## วิธีใช้งาน
-
-### 1. ขอ Token Plan Key
-1. ไปที่ [MiniMax Platform](https://platform.minimax.io/docs/token-plan/faq)
-2. ล็อกอินและคัดลอก Token Plan Key ของคุณ
-
-### 2. ตั้งค่าใน VS Code
-1. คลิกที่ `🔑 MiniMax: Set API Key` บน Status Bar (ด้านล่างขวา)
-2. วาง Token Plan Key ของคุณ
-3. Status Bar จะแสดง % การใช้งานทันที
-
-### 3. ดูรายละเอียดเพิ่มเติม
-- คลิกที่ Status Bar เพื่อดู **Details** (กราฟ + ข้อมูลดิบ)
-- รันคำสั่ง **MiniMax Usage: Refresh** เพื่อดึงข้อมูลใหม่ทันที
-
-## ตัวอย่างบน Status Bar
-
-| สถานการณ์ | แสดง |
-| --- | --- |
-| ใช้งานได้ปกติ | `⚡ MiniMax 0% (10h)` |
-| ใช้งานสูง | `⚡ MiniMax 85% (30m)` |
-| ยังไม่ตั้ง API Key | `🔑 MiniMax: Set API Key` |
-| เกิดข้อผิดพลาด | `⚠️ MiniMax: Error` |
-
-หมายเหตุ: เวลาในวงเล็บ `(10h)` คือเวลาที่เหลือก่อน quota จะ reset
-
-## คำสั่งที่มี
-
-| คำสั่ง | คำอธิบาย |
-| --- | --- |
-| `MiniMax Usage: Set API Key` | ตั้งค่า Token Plan Key |
-| `MiniMax Usage: Refresh` | ดึงข้อมูลการใช้งานใหม่ |
-| `MiniMax Usage: Show Details` | แสดงรายละเอียดทั้งหมด |
-
-## การตั้งค่า
-
-| การตั้งค่า | ชนิด | ค่าเริ่มต้น | คำอธิบาย |
-| --- | --- | --- | --- |
-| `minimaxUsage.refreshIntervalMinutes` | `number` | `5` | ระยะเวลา refresh อัตโนมัติ (นาที) |
-
-## สิ่งที่แก้ไข
-
-- **v1.0.2** — แสดงเวลาที่เหลือก่อน quota reset ใน status bar (เช่น `7% (1h26m)`)
-  - ใช้ `end_time - Date.now()` แทน `remains_time` (เนื่องจาก API บางครั้ง return หน่วยไม่ตรง)
-  - แก้ไข bug ที่เวลาไม่แสดงเมื่อ `total = 0`
-- **v1.0.1** — แก้ไข publisher ID จาก `undefined_publisher` เป็น `minimax-usage`
-
-## API ที่ใช้
+## API
 
 - **Endpoint:** `GET https://www.minimax.io/v1/token_plan/remains`
 - **Auth:** `Authorization: Bearer <Token Plan Key>`
 
-## ความต้องการ
-
-- VS Code เวอร์ชัน 1.85.0 ขึ้นไป
-- Token Plan Key ที่ถูกต้องจาก MiniMax
-
-## สร้างไฟล์ .vsix เอง
-
-```powershell
-# เปลี่ยน version ใน package.json ก่อน
-((Get-Content package.json) -replace '"version": "1.0.0"', '"version": "1.0.1"') | Set-Content package.json
-
-# สร้างไฟล์ .vsix
-npx vsce package
-```
-
-ไฟล์ที่ได้จะเป็น `minimax-usage-1.0.1.vsix`
-
 ## License
 
-[MIT](LICENSE)
+> [!WARNING]
+> This extension uses an internal MiniMax API (`www.minimax.io/v1/token_plan/remains`) which is not officially documented. The API may change without notice, which could break this extension.
 
-## แหล่งที่มา
-
-Inspired by [vscode-zai-usage](https://github.com/j4rviscmd/vscode-zai-usage) by j4rviscmd
+MIT
