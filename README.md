@@ -71,8 +71,20 @@ Most existing VS Code extensions for AI usage tracking don't support MiniMax's t
 
 ### Method 2: Via Command Line
 ```bash
-code --install-extension minimax-usage-1.0.2.vsix
+code --install-extension minimax-usage-x.x.x.vsix
 ```
+
+## Build from source
+
+```bash
+# Install vsce (once)
+npm install -g vsce
+
+# Package extension
+vsce package
+```
+
+This creates `minimax-usage-X.X.X.vsix` ready for installation.
 
 ## API
 

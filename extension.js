@@ -116,7 +116,9 @@ function updateStatusBar(data) {
   let text = '$(pulse) MiniMax', pct = null, timeLeftStr = '';
 
   if (data.model_remains && Array.isArray(data.model_remains)) {
-    const mainModel = data.model_remains.find(m => m.model_name === 'MiniMax-M*');
+    // Try to find MiniMax-M* first, fall back to first available model
+    const mainModel = data.model_remains.find(m => m.model_name && m.model_name.includes('MiniMax-M')) 
+                   || data.model_remains[0];
     if (mainModel) {
       const used = mainModel.current_interval_usage_count || 0;
       const total = mainModel.current_interval_total_count || 0;
@@ -139,10 +141,24 @@ function updateStatusBar(data) {
         } else {
           timeLeftStr = ` (<1m)`;
         }
+      } else {
+        // Time has expired, show remaining time from remains_time field
+        const remainsSec = mainModel.remains_time || 0;
+        if (remainsSec > 0) {
+          const hours = Math.floor(remainsSec / 3600);
+          const mins = Math.floor((remainsSec % 3600) / 60);
+          if (hours > 0) {
+            timeLeftStr = ` (${hours}h${mins}m)`;
+          } else if (mins > 0) {
+            timeLeftStr = ` (${mins}m)`;
+          } else {
+            timeLeftStr = ` (<1m)`;
+          }
+        }
       }
 
       // DEBUG
-      console.log('[MiniMax] end_time raw:', endTime, 'endTimeMs:', endTimeMs, 'Date.now():', Date.now(), 'remainsMs:', remainsMs, 'pct:', pct, 'total:', total);
+      console.log('[MiniMax] end_time raw:', endTime, 'endTimeMs:', endTimeMs, 'Date.now():', Date.now(), 'remainsMs:', remainsMs, 'pct:', pct, 'total:', total, 'timeLeftStr:', timeLeftStr);
 
       if (pct !== null || timeLeftStr) {
         text = `$(pulse) MiniMax${pct !== null ? ' ' + pct + '%' : ''}${timeLeftStr}`;
