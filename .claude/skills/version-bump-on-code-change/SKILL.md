@@ -42,9 +42,21 @@ Default to **patch** when unsure. You can always bump again.
 
 Examples: `Fix status bar percentage when API returns total=0; bump to 1.0.4` · `Add dark-mode toggle; bump to 1.1.0` · `Drop Python 3.7 support; bump to 2.0.0`
 
+### 3. Push and publish
+
+Bumping a version that no one can download is a half-finished job. After committing the bump, ship it.
+
+- **Push commits** so the new version exists on the remote: `git push origin main`
+- **Publish the artifact** to its distribution channel. The command depends on the ecosystem:
+  - **VSCode extension**: `gh release create vX.Y.Z ./artifact --draft`, review, then `gh release edit vX.Y.Z --draft=false`
+  - **npm**: `npm publish` (after `npm run build`)
+  - **pip**: `twine upload dist/*`
+  - **cargo**: `cargo publish`
+- **If publish fails**: do not revert the commit. The commit is correct; the publish is a separate failure. Surface the error and retry the publish only.
+
 ## Red Flags - STOP and Reset
 
-"Just a typo fix / dead-code cleanup" · "User didn't ask" · "We'll batch bumps" · "Docs / tests / config don't count" · "Previous commit had the bump" · "User will bump it manually" · "Too small for a new version" · "Old build artifact in working tree is fine, the new build will overwrite" → it's stale, remove it (`git rm` if tracked) · "User might have unstaged work" → `git status` first; if clean, commit · "PR description has the details" → no, the commit message IS the history
+"Just a typo fix / dead-code cleanup" · "User didn't ask" · "We'll batch bumps" · "Docs / tests / config don't count" · "Previous commit had the bump" · "User will bump it manually" · "Too small for a new version" · "Old build artifact in working tree is fine, the new build will overwrite" → it's stale, remove it (`git rm` if tracked) · "User will publish later" → no, publish as part of the bump · "Publish might fail, skip it" → if it fails, surface the error and retry; don't skip · "User might have unstaged work" → `git status` first; if clean, commit · "PR description has the details" → no, the commit message IS the history
 
 **All of these mean: bump the version, write what actually changed, commit.**
 
@@ -60,7 +72,9 @@ Examples: `Fix status bar percentage when API returns total=0; bump to 1.0.4` ·
 | "User might have unstaged work" | `git status` first. If clean, commit. If not, surface and ask. |
 | "Commit can be vague, PR has details" | No. Commit IS the history. Be specific. |
 | "Old build artifact in working tree is harmless" | Stale artifacts confuse the next agent and break verification. Clean up (`git rm` if tracked, `rm -f` if not). |
+| "Publish can wait until user reviews" | Bumping without publishing is half a release. Ship the bump. |
+| "Publish failed, so the bump is broken" | The commit is correct; the publish is a separate step. Don't revert. Retry the publish. |
 
 ## Verification
 
-After committing, confirm: (1) `git log -1` mentions the new version · (2) `git show HEAD --stat` shows manifest in the diff with bumped version · (3) build artifact matches the manifest version (in the commit if tracked, or freshly built and excluded by `.gitignore` if not), and any stale artifacts from previous versions are removed from the working tree
+After committing, confirm: (1) `git log -1` mentions the new version · (2) `git show HEAD --stat` shows manifest in the diff with bumped version · (3) build artifact matches the manifest version (in the commit if tracked, or freshly built and excluded by `.gitignore` if not), and any stale artifacts from previous versions are removed from the working tree · (4) release is published (visible at the public URL, or `gh release view vX.Y.Z` shows `isDraft: false` for GitHub Releases; equivalent check for npm/pip/cargo)
