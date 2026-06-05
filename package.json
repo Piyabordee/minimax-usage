@@ -12,7 +12,7 @@
   "main": "./extension.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/minimax-usage"
+    "url": "https://github.com/Piyabordee/minimax-usage"
   },
   "scripts": {
     "package": "vsce package"
