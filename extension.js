@@ -103,16 +103,6 @@ function fetchUsage(apiKey) {
 }
 
 function updateStatusBar(data) {
-  const get = (keys) => {
-    for (const k of keys) {
-      if (data[k] != null) return data[k];
-      for (const v of Object.values(data))
-        if (v && typeof v === 'object' && v[k] != null) return v[k];
-    }
-    return null;
-  };
-  const fmt = n => n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(1)+'K' : String(n);
-
   let text = '$(pulse) MiniMax', pct = null, timeLeftStr = '';
 
   if (data.model_remains && Array.isArray(data.model_remains)) {
@@ -129,6 +119,12 @@ function updateStatusBar(data) {
 
       if (total > 0) {
         pct = Math.round((used / total) * 100);
+      } else if (mainModel.current_interval_status === 3) {
+        pct = 0;
+      } else if (mainModel.current_interval_remaining_percent != null) {
+        pct = Math.max(0, Math.min(100, 100 - mainModel.current_interval_remaining_percent));
+      } else if (mainModel.current_weekly_remaining_percent != null) {
+        pct = Math.max(0, Math.min(100, 100 - mainModel.current_weekly_remaining_percent));
       }
 
       if (remainsMs > 0) {
